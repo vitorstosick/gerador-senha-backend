@@ -27,7 +27,7 @@ public class JwtService {
         Usuario authenticatedUser = (Usuario) subject.getPrincipal();
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
-                .issuer("edna")
+                .issuer("gerador")
                 .issuedAt(now)
                 .expiresAt(now.plusSeconds(tenHoursInSeconds))
                 .subject(authenticatedUser.getId())

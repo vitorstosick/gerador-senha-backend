@@ -1,9 +1,7 @@
 package br.com.vitor.geradorsenha.model.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.hibernate.annotations.UuidGenerator;
@@ -21,4 +19,9 @@ public class Item {
     private String nome;
 
     private String senha;
+
+    @ManyToOne
+    @JoinColumn(name = "id_usuario")
+    @JsonManagedReference(value = "item_usuario")
+    private Usuario usuario;
 }

@@ -1,8 +1,9 @@
 package br.com.vitor.geradorsenha.model.entities;
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +13,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
+@Data
 public class Usuario implements UserDetails {
 
     @Id
@@ -25,7 +27,9 @@ public class Usuario implements UserDetails {
     @NotBlank
     private LocalDate dataNascimento;
 
-//    private List<Item> listaDeItens;
+    @OneToMany(mappedBy = "usuario")
+    @JsonBackReference(value = "item_usuario")
+    private List<Item> listaDeItens;
 
     @NotBlank(message = "Email é obrigatorio.")
     @Email(message = "Email deve ser válido.")
@@ -34,65 +38,6 @@ public class Usuario implements UserDetails {
 
     @NotBlank
     private String senha;
-
-    public Usuario() {}
-
-    public Usuario(String id, String nome, LocalDate dataNascimento, List<Item> listaDeItens, String email, String senha) {
-        this.id = id;
-        this.nome = nome;
-        this.dataNascimento = dataNascimento;
-//        this.listaDeItens = listaDeItens;
-        this.email = email;
-        this.senha = senha;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public LocalDate getDataNascimento() {
-        return dataNascimento;
-    }
-
-    public void setDataNascimento(LocalDate dataNascimento) {
-        this.dataNascimento = dataNascimento;
-    }
-
-//    public List<Item> getListaDeItens() {
-//        return listaDeItens;
-//    }
-//
-//    public void setListaDeItens(List<Item> listaDeItens) {
-//        this.listaDeItens = listaDeItens;
-//    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

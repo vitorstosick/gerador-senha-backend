@@ -1,33 +1,36 @@
 package br.com.vitor.geradorsenha.controllers;
 
+import br.com.vitor.geradorsenha.auth.AuthService;
 import br.com.vitor.geradorsenha.exception.GeradorException;
+import br.com.vitor.geradorsenha.model.dtos.ItemDTO;
+import br.com.vitor.geradorsenha.model.entities.Usuario;
+import br.com.vitor.geradorsenha.services.ItemService;
 import jakarta.validation.Valid;
-import br.com.vitor.geradorsenha.model.dtos.UsuarioDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import br.com.vitor.geradorsenha.services.UsuarioService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @RestController
-@RequestMapping(path = "/public/usuario")
-public class UsuarioController {
+@RequestMapping(path = "/item")
+public class ItemController {
 
     @Autowired
-    private UsuarioService usuarioService;
+    private ItemService itemService;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private AuthService authService;
 
-    @PostMapping(path = "/signup")
-    public ResponseEntity<Void> signUp(@Valid @RequestBody UsuarioDTO dto) throws GeradorException {
+    @PostMapping(path = "/cadastrar")
+    public ResponseEntity<Void> cadastrarItem(@Valid @RequestBody ItemDTO dto) throws GeradorException {
 
-        usuarioService.signUp(dto);
+        Usuario usuario = authService.getAuthenticatedUser();
+
+        itemService.cadastrar(dto);
 
         return ResponseEntity.created(null).build();
     }
+
 }

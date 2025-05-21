@@ -18,16 +18,7 @@ public class AuthController {
 
     @PostMapping
     public String handle(Authentication authentication, HttpServletResponse response) {
-        String token = authService.authenticate(authentication);
 
-        Cookie cookie = new Cookie("authToken", token);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        cookie.setMaxAge(60 * 60 * 10); // 10 hours
-        response.addCookie(cookie);
-        response.setHeader("Authorization", "Bearer " + token);
-
-        return token;
+        return authService.authenticate(authentication);
     }
 }
