@@ -24,9 +24,8 @@ public class UsuarioService implements UserDetailsService {
     private PasswordEncoder passwordEncoder;
 
     public UserDetails buscarUsuarioPorId(String id) throws GeradorException {
-        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new GeradorException("Usuario não encontrado", HttpStatus.NOT_FOUND));
 
-        return usuario;
+        return usuarioRepository.findById(id).orElseThrow(() -> new GeradorException("Usuario não encontrado", HttpStatus.NOT_FOUND));
     }
 
     public HttpStatus signUp(UsuarioDTO dto) throws GeradorException {
@@ -35,25 +34,15 @@ public class UsuarioService implements UserDetailsService {
 
         if (!dto.getSenha().equals(dto.getConfirmacaoSenha())) {
             throw new GeradorException("As senhas não são iguais", HttpStatus.BAD_REQUEST);
-        } else {
-            String senhaCriptografada = passwordEncoder.encode(dto.getSenha());
-
-            dto.setSenha(senhaCriptografada);
-
-            mapearParaDTO(dto);
-            usuarioRepository.save(mapearParaDTO(dto));
         }
+        String senhaCriptografada = passwordEncoder.encode(dto.getSenha());
+
+        dto.setSenha(senhaCriptografada);
+
+        mapearParaDTO(dto);
+        usuarioRepository.save(mapearParaDTO(dto));
 
         return HttpStatus.CREATED;
-    }
-
-    public Usuario mapearParaDTO(UsuarioDTO dto) {
-        Usuario usuario = new Usuario();
-        usuario.setEmail(dto.getEmail());
-        usuario.setNome(dto.getNome());
-        usuario.setDataNascimento(dto.getDataNascimento());
-        usuario.setSenha(dto.getSenha());
-        return usuario;
     }
 
     private void validarEmailJaExistente(UsuarioDTO dto) throws GeradorException {
@@ -67,6 +56,15 @@ public class UsuarioService implements UserDetailsService {
     public Usuario buscarPorEmail(String email) throws UsernameNotFoundException {
 
         return usuarioRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Uusario nao encontrado"));
+    }
+
+    public Usuario mapearParaDTO(UsuarioDTO dto) {
+        Usuario usuario = new Usuario();
+        usuario.setEmail(dto.getEmail());
+        usuario.setNome(dto.getNome());
+        usuario.setDataNascimento(dto.getDataNascimento());
+        usuario.setSenha(dto.getSenha());
+        return usuario;
     }
 
     @Override

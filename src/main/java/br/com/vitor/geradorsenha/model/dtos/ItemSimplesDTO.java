@@ -5,9 +5,8 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ItemDTO {
+public class ItemSimplesDTO {
 
     private String nome;
     private String senha;
-    private String idUsuario;
 }
