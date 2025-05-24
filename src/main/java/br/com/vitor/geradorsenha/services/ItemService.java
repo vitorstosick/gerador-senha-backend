@@ -21,8 +21,8 @@ public class ItemService {
 
     public HttpStatus cadastrarItem(ItemDTO dto, Usuario usuario) throws GeradorException{
 
-        if(itemRepository.findByNome(dto.getNome()).isPresent()) {
-            throw new GeradorException("Nome do item já cadastrado", HttpStatus.CONFLICT);
+        if (itemRepository.findByNomeAndUsuarioId(dto.getNome(), usuario.getId()).isPresent()) {
+            throw new GeradorException("Você já cadastrou um item com esse nome", HttpStatus.CONFLICT);
         }
         Item item = new Item();
         item.setNome(dto.getNome());

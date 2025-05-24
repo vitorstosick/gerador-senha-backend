@@ -30,6 +30,7 @@ public class UsuarioService implements UserDetailsService {
 
     public HttpStatus signUp(UsuarioDTO dto) throws GeradorException {
 
+        validarFormatoEmail(dto.getEmail());
         validarEmailJaExistente(dto);
 
         if (!dto.getSenha().equals(dto.getConfirmacaoSenha())) {
@@ -51,11 +52,12 @@ public class UsuarioService implements UserDetailsService {
         if (usuarioExistente.isPresent()) {
             throw new GeradorException("Email já cadastrado", HttpStatus.CONFLICT);
         }
+
     }
 
     public Usuario buscarPorEmail(String email) throws UsernameNotFoundException {
 
-        return usuarioRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Uusario nao encontrado"));
+        return usuarioRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Usuario nao encontrado"));
     }
 
     public Usuario mapearParaDTO(UsuarioDTO dto) {
@@ -70,6 +72,14 @@ public class UsuarioService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return this.buscarPorEmail(username);
+    }
+
+    private void validarFormatoEmail(String email) throws GeradorException {
+        String regexEmail = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+
+        if (email == null || !email.matches(regexEmail)) {
+            throw new GeradorException("Formato de email inválido", HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

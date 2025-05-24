@@ -7,6 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class ItemSimplesDTO {
 
+    private String id;
     private String nome;
     private String senha;
 }

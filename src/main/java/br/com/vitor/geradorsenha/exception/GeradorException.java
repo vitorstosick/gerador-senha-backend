@@ -4,12 +4,16 @@ import lombok.Data;
 import org.springframework.http.HttpStatus;
 
 @Data
-public class GeradorException extends Exception{
+public class GeradorException extends Exception {
 
-    HttpStatus statusCode;
+    private final HttpStatus status;
 
-    public GeradorException(String message, HttpStatus statusCode){
+    public GeradorException(String message, HttpStatus status) {
         super(message);
-        this.statusCode = statusCode;
+        this.status = status;
+    }
+
+    public HttpStatus getStatus() {
+        return status;
     }
 }

@@ -13,9 +13,9 @@ import java.util.Optional;
 @Repository
 public interface ItemRepository extends JpaRepository<Item, String> {
 
-    Optional<Item> findByNome(String nome);
+    Optional<Item> findByNomeAndUsuarioId(String nome, String usuarioId);
 
-    @Query("SELECT new br.com.vitor.geradorsenha.model.dtos.ItemSimplesDTO(i.nome, i.senha) FROM Item i WHERE i.usuario.id = :idUsuario")
+    @Query("SELECT new br.com.vitor.geradorsenha.model.dtos.ItemSimplesDTO(i.id, i.nome, i.senha) FROM Item i WHERE i.usuario.id = :idUsuario")
     List<ItemSimplesDTO> findAllByUsuarioId(@Param("idUsuario") String idUsuario);
 
 }
